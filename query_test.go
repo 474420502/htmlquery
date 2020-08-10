@@ -204,3 +204,37 @@ func TestPointer(t *testing.T) {
 	// t.Error(reflect.ValueOf(nodes1[1]).Pointer())
 	// t.Error(reflect.ValueOf(nodes2[0]).Pointer())
 }
+
+func TestComment(t *testing.T) {
+
+	// doctxt := `<!DOCTYPE html>
+	// <html>
+	// 	<head>
+	// 		<meta charset="UTF-8">
+	// 		<title>Comment类型</title>
+	// 	</head>
+	// 	<body>
+	// 		 <div id="myDiv"><!--A comment --></div>
+	// 	</body>
+	// 	<script>
+	// 		 /*
+	// 		  注释在 DOM 中是通过 Comment 类型来表示的。Comment 节点具有下列特征：
+	// 	nodeType 的值为 8；
+	// 		nodeName 的值为"#comment"；
+	// 		nodeValue 的值是注释的内容；
+	// 	 parentNode 可能是 Document 或 Element；
+	// 		不支持（没有）子节点。
+	// 		Comment 类型与 Text 类型继承自相同的基类，因此它拥有除 splitText()之外的所有字符串操
+	// 		作方法。与 Text 类型相似，也可以通过 nodeValue 或 data 属性来取得注释的内容。
+	// 		  * */
+	// 		var div = document.getElementById("myDiv");
+	// 		var comment = div.firstChild;
+	// 		console.log(comment.data);
+	// 	</script>`
+	// doctxt = "<td></td>"
+	// doc := loadHTML(doctxt)
+	// // d, _ := doc.Query("//div[@id='myDiv']")
+	// // commtent := d.First()
+	// t.Error(doc)
+
+}

@@ -60,6 +60,32 @@ func (n *Node) GetAttributeByKey(key string) *Attribute {
 	return nil
 }
 
+func (n *Node) Last() *Node {
+	return (*Node)(n.LastChild)
+}
+
+func (n *Node) First() *Node {
+	return (*Node)(n.FirstChild)
+}
+
+func (n *Node) Next() *Node {
+	return (*Node)(n.NextSibling)
+}
+
+func (n *Node) Prev() *Node {
+	return (*Node)(n.PrevSibling)
+}
+
+// func (n *Node) NodeName() string {
+// 	switch n.Type {
+// 	case html.CommentNode:
+// 		return "#comment"
+// 	case html.DocumentNode:
+// 		return "#document"
+// 	}
+// 	return ""
+// }
+
 func (n *Node) TagName() (string, error) {
 	if n.Type == html.ElementNode {
 		return n.Data, nil
