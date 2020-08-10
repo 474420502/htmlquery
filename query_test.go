@@ -130,7 +130,7 @@ func TestNavigator(t *testing.T) {
 func TestXPath(t *testing.T) {
 	testNewDoc := (*Node)(testDoc)
 	node := testNewDoc.FindOne("//html")
-	if node.GetAttrValByKey("lang") != "en-US" {
+	if node.AttributeValue("lang") != "en-US" {
 		t.Fatal("//html[@lang] != en-Us")
 	}
 
@@ -173,6 +173,19 @@ func TestQueryAll(t *testing.T) {
 		}
 	}
 
+}
+
+func TestQueryAllText(t *testing.T) {
+	doc := loadHTML(`<html><b attr="1">你好</b><b attr="2">shit</b></html>`)
+	nodes, err := doc.QueryAll("//b")
+	if err != nil {
+		panic(err)
+	}
+	for _, node := range nodes {
+		if len(node.Text()) < 2 {
+			t.Error(node.Text())
+		}
+	}
 }
 
 func loadHTML(str string) *Node {

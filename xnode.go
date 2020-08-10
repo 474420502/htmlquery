@@ -10,47 +10,58 @@ import (
 
 type Node html.Node
 
-func (n *Node) GetAttrValByKey(key string) string {
+func (n *Node) AttributeValue(key string) string {
 	if n.Type == html.ElementNode && n.Parent == nil && key == n.Data {
 		return n.InnerText()
 	}
 	return n.GetAttributeByKey(key).Val
 }
 
-func (n *Node) GetAttributeByValue(val string) *html.Attribute {
-
+func (n *Node) GetAttributeByValue(val string) *Attribute {
 	for _, attr := range n.Attr {
 		if attr.Val == val {
-			return &attr
+			return (*Attribute)(&attr)
 		}
 	}
 	return nil
 }
 
-func (n *Node) GetAttributeByNamespace(namespace string) *html.Attribute {
+func (n *Node) GetAttributeByNamespace(namespace string) *Attribute {
 	for _, attr := range n.Attr {
 		if attr.Namespace == namespace {
-			return &attr
+			return (*Attribute)(&attr)
 		}
 	}
 	return nil
 }
 
-func (n *Node) GetAttributeByKey(key string) *html.Attribute {
+func (n *Node) Attribute(key string) *Attribute {
+	return n.GetAttributeByKey(key)
+}
+
+func (n *Node) GetAttributeByKey(key string) *Attribute {
 
 	for _, attr := range n.Attr {
 		if attr.Key == key {
-			return &attr
+			return (*Attribute)(&attr)
 		}
 	}
 	return nil
 }
 
-func (n *Node) GetTagName() (string, error) {
+func (n *Node) TagName() (string, error) {
 	if n.Type == html.ElementNode {
 		return n.Data, nil
 	}
 	return "", errors.New("the node is not ElementNode")
+}
+
+func (n *Node) Parent() *Node {
+	return (*Node)(n.Parent)
+}
+
+func (n *Node) Text() string {
+	return n.InnerText()
 }
 
 // Find is like QueryAll but Will panics if the expression `expr` cannot be parsed.
