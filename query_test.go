@@ -130,7 +130,7 @@ func TestNavigator(t *testing.T) {
 func TestXPath(t *testing.T) {
 	testNewDoc := (*Node)(testDoc)
 	node := testNewDoc.FindOne("//html")
-	if node.AttributeValue("lang") != "en-US" {
+	if av, err := node.AttributeValue("lang"); err != nil && av != "en-US" {
 		t.Fatal("//html[@lang] != en-Us")
 	}
 

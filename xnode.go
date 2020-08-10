@@ -10,11 +10,14 @@ import (
 
 type Node html.Node
 
-func (n *Node) AttributeValue(key string) string {
+func (n *Node) AttributeValue(key string) (string, error) {
 	if n.Type == html.ElementNode && n.Parent == nil && key == n.Data {
-		return n.InnerText()
+		return n.InnerText(), nil
 	}
-	return n.GetAttributeByKey(key).Val
+	if attr := n.GetAttributeByKey(key); attr != nil {
+		return attr.Val, nil
+	}
+	return "", errors.New("attribute is nil")
 }
 
 func (n *Node) GetAttributeByValue(val string) *Attribute {
