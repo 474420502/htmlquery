@@ -75,6 +75,10 @@ func (n *Node) Text() string {
 	return n.InnerText()
 }
 
+func (n *Node) String() string {
+	return n.OutputHTML(true)
+}
+
 // Find is like QueryAll but Will panics if the expression `expr` cannot be parsed.
 //
 // See `QueryAll()` function.
