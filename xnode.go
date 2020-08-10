@@ -42,6 +42,14 @@ func (n *Node) Attribute(key string) *Attribute {
 	return n.GetAttributeByKey(key)
 }
 
+func (n *Node) Attributes() []*Attribute {
+	var result []*Attribute
+	for i := range n.Attr {
+		result = append(result, (*Attribute)(&n.Attr[i]))
+	}
+	return result
+}
+
 func (n *Node) GetAttributeByKey(key string) *Attribute {
 
 	for _, attr := range n.Attr {

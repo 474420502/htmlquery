@@ -195,3 +195,12 @@ func loadHTML(str string) *Node {
 	}
 	return node
 }
+
+func TestPointer(t *testing.T) {
+	// doc := loadHTML(`<html><body><b attr="1">你好</b><b attr="2">shit</b></body></html>`)
+	// nodes1, _ := doc.QueryAll("//b")
+	// nodes2, _ := doc.QueryAll("//body//b")
+	// t.Error(nodes1, nodes2)
+	// t.Error(reflect.ValueOf(nodes1[1]).Pointer())
+	// t.Error(reflect.ValueOf(nodes2[0]).Pointer())
+}
