@@ -56,7 +56,7 @@ func (n *Node) TagName() (string, error) {
 	return "", errors.New("the node is not ElementNode")
 }
 
-func (n *Node) Parent() *Node {
+func (n *Node) GetParent() *Node {
 	return (*Node)(n.Parent)
 }
 
