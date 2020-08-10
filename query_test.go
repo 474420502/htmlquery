@@ -98,20 +98,21 @@ func TestLoadDoc(t *testing.T) {
 }
 
 func TestNavigator(t *testing.T) {
-	top := FindOne(testDoc, "//html")
-	nav := &NodeNavigator{curr: top, root: top, attr: -1}
+	testNewDoc := (*Node)(testDoc)
+	top := testNewDoc.FindOne("//html")
+	nav := top.CreateXPathNavigator()
 	nav.MoveToChild() // HEAD
 	nav.MoveToNext()
 	if nav.NodeType() != xpath.TextNode {
 		t.Fatalf("expectd node type is TextNode,but got %vs", nav.NodeType())
 	}
 	nav.MoveToNext() // <BODY>
-	if nav.Value() != InnerText(FindOne(testDoc, "//body")) {
+	if nav.Value() != testNewDoc.FindOne("//body").InnerText() {
 		t.Fatal("body not equal")
 	}
 	nav.MoveToPrevious() //
 	nav.MoveToParent()   //<HTML>
-	if nav.curr != top {
+	if (*Node)(nav.curr) != top {
 		t.Fatal("current node is not html node")
 	}
 	nav.MoveToNextAttribute()
@@ -127,23 +128,24 @@ func TestNavigator(t *testing.T) {
 }
 
 func TestXPath(t *testing.T) {
-	node := FindOne(testDoc, "//html")
-	if SelectAttr(node, "lang") != "en-US" {
+	testNewDoc := (*Node)(testDoc)
+	node := testNewDoc.FindOne("//html")
+	if node.GetAttrValByKey("lang") != "en-US" {
 		t.Fatal("//html[@lang] != en-Us")
 	}
 
-	node = FindOne(testDoc, "//header")
-	if strings.Index(InnerText(node), "Logo") > 0 {
+	node = testNewDoc.FindOne("//header")
+	if strings.Index(node.InnerText(), "Logo") > 0 {
 		t.Fatal("InnerText() have comment node text")
 	}
-	if strings.Index(OutputHTML(node, true), "Logo") == -1 {
+	if strings.Index(node.OutputHTML(true), "Logo") == -1 {
 		t.Fatal("OutputHTML() shoud have comment node text")
 	}
-	link := FindOne(testDoc, "//a[1]/@href")
+	link := testNewDoc.FindOne("//a[1]/@href")
 	if link == nil {
 		t.Fatal("link is nil")
 	}
-	if v := InnerText(link); v != "/London" {
+	if v := link.InnerText(); v != "/London" {
 		t.Fatalf("expect value is /London, but got %s", v)
 	}
 
@@ -151,14 +153,29 @@ func TestXPath(t *testing.T) {
 
 func TestXPathCdUp(t *testing.T) {
 	doc := loadHTML(`<html><b attr="1"></b></html>`)
-	node := FindOne(doc, "//b/@attr/..")
+	node := doc.FindOne("//b/@attr/..")
 	t.Logf("node = %#v", node)
 	if node == nil || node.Data != "b" {
 		t.Fatal("//b/@id/.. != <b></b>")
 	}
 }
 
-func loadHTML(str string) *html.Node {
+func TestQueryAll(t *testing.T) {
+	doc := loadHTML(`<html><b attr="1"></b><b attr="2"></b></html>`)
+	nodes, err := doc.QueryAll("//b/@attr/..")
+	if err != nil {
+		t.Error(err)
+	}
+	t.Logf("node = %#v", nodes)
+	for _, n := range nodes {
+		if n.Data != "b" {
+			t.Error(n.Data)
+		}
+	}
+
+}
+
+func loadHTML(str string) *Node {
 	node, err := Parse(strings.NewReader(str))
 	if err != nil {
 		panic(err)
