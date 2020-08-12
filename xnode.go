@@ -3,12 +3,17 @@ package htmlquery
 import (
 	"bytes"
 	"errors"
+	"regexp"
 
 	"github.com/antchfx/xpath"
 	"golang.org/x/net/html"
 )
 
 type Node html.Node
+
+func (n *Node) Regexp(exp string) [][]string {
+	return regexp.MustCompile(exp).FindAllStringSubmatch(n.Data, -1)
+}
 
 func (n *Node) AttributeValue(key string) (string, error) {
 	if n.Type == html.ElementNode && n.Parent == nil && key == n.Data {
