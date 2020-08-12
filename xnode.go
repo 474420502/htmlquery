@@ -11,7 +11,11 @@ import (
 
 type Node html.Node
 
-func (n *Node) Regexp(exp string) [][]string {
+func (n *Node) Regexp(exp string) []string {
+	return regexp.MustCompile(exp).FindAllString(n.Data, -1)
+}
+
+func (n *Node) RegexpEx(exp string) [][]string {
 	return regexp.MustCompile(exp).FindAllStringSubmatch(n.Data, -1)
 }
 
